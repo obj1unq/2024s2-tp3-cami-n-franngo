@@ -1,0 +1,40 @@
+import camion.*
+import cosas.*
+
+describe "prueba de métodos del camión" {
+
+    test "cargar al camión" {
+        camion.cargar(knightRider)
+        camion.cargar(paraTest1)
+        camion.cargar(paraTest2)
+        assert.equals(#{knightRider, paraTest1, paraTest2}, camion.cosas())
+        assert.equals(3, camion.cosas().size())
+    }
+
+    test "excepción si descargo algo que no fue cargado" {
+        camion.cargar(paraTest1)
+        camion.cargar(paraTest2)
+        assert.throwsExceptionWithMessage("No se puede descargar del camión una cosa que no se tiene", {camion.descargar(knightRider)})
+    }
+
+    test "tiene peso par" {
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.that(camion.todoPesoPar())
+        camion.cargar(paraTest1)
+        assert.notThat(camion.todoPesoPar())
+    }
+
+    test "hay alguno que pesa 1200" {
+        camion.cargar(paraTest2) 
+        assert.that(camion.hayAlgunoQuePesa(1200))
+    }
+
+    test "el de nivel 10 es knigthRider" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(knightRider, camion.elDeNivel(10))
+    }
+
+}
