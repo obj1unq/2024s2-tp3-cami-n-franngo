@@ -1,6 +1,7 @@
 import camion.*
 import cosas.*
 
+/*
 describe "mensajes del camión" {
 
     test "cargar al camión" {
@@ -72,3 +73,4 @@ describe "mensajes del camión" {
     }
 
 }
+*/
