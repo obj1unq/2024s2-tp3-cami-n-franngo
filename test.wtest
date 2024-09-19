@@ -1,7 +1,7 @@
 import camion.*
 import cosas.*
 
-describe "prueba de métodos del camión" {
+describe "mensajes del camión" {
 
     test "cargar al camión" {
         camion.cargar(knightRider)
@@ -35,6 +35,40 @@ describe "prueba de métodos del camión" {
         camion.cargar(knightRider)
         camion.cargar(paraTest2)
         assert.equals(knightRider, camion.elDeNivel(10))
+    }
+
+    test "el peso del camión con las 3 cosas es 2901" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(2901, camion.pesoTotal())
+    }
+
+    test "el camión con las 3 cosas cargadas está excedido de peso" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.that(camion.excedidoDePeso())
+    }
+
+    test "paraTest2 y knigthRider superan peligrosidad de 8" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(#{paraTest2, knightRider}, camion.objetosQueSuperanPeligrosidad(8))
+    }
+
+    test "paraTest2 y knightRider son más peligrosos que paraTest1" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(#{knightRider, paraTest2}, camion.objetosMasPeligrososQueCosa(paraTest1))
+    }
+
+    test "camión con paraTest1 y knigthRider puede circular en ruta con nivel de peligrosidad 11" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        assert.that(camion.puedeCircularEnRuta(11))
     }
 
 }
