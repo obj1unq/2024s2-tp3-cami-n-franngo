@@ -7,6 +7,7 @@ object camion {
 		
 	method cargar(cosa) {
 		cosas.add(cosa)
+		cosa.sufrirCambiosPostCarga()
 	}
 
 	method descargar(cosa) {

@@ -15,6 +15,9 @@ object knightRider {
 	method peso() { return 500 }
 	method nivelPeligrosidad() { return 10 }
 	method bultos() { return 1 }
+
+	method sufrirCambiosPostCarga() {}
+
 }
 
 object bumblebee {
@@ -23,6 +26,11 @@ object bumblebee {
 	method peso() { return 800 }
 	method nivelPeligrosidad() { return estado.nivelPeligrosidad() }
 	method bultos() { return 2 }
+
+	method sufrirCambiosPostCarga() {
+		estado = robot
+	}
+
 }
 
 object robot {
@@ -49,6 +57,15 @@ object paqueteDeLadrillos {
 			return 1
 		}
 	}
+
+	method agregarLadrillos(cantidad) {
+		cantidadDeLadrillos += cantidad
+	}
+
+	method sufrirCambiosPostCarga() {
+		self.agregarLadrillos(12)
+	}
+
 }
 
 object arenaAGranel {
@@ -60,6 +77,11 @@ object arenaAGranel {
 	method agregarKilos(kg) {
 		peso += kg
 	}
+
+	method sufrirCambiosPostCarga() {
+		self.agregarKilos(20)
+	}
+
 }
 
 object bateriaAntiaerea {
@@ -68,6 +90,11 @@ object bateriaAntiaerea {
 	method peso() { return estado.peso() }
 	method nivelPeligrosidad() { return estado.nivelPeligrosidad() }
 	method bultos() { return estado.bultos() }
+
+	method sufrirCambiosPostCarga() {
+		estado = conMisiles
+	}
+
 }
 
 object sinMisiles {
@@ -105,6 +132,11 @@ object contenedorPortuario {
 	method bultosDeCosasEnContenedor() {
 		return cosas.sum({cosa => cosa.bultos()})
 	}
+
+	method sufrirCambiosPostCarga() {
+		cosas.forEach({cosa => cosa.sufrirCambiosPostCarga()})
+	}
+
 }
 
 object residuosRadioactivos {
@@ -112,6 +144,15 @@ object residuosRadioactivos {
 
 	method nivelPeligrosidad() { return 200 }
 	method bultos() { return 1 }
+
+	method agregarKilos(kg) {
+		peso += kg
+	}
+
+	method sufrirCambiosPostCarga() {
+		self.agregarKilos(15)
+	}
+
 }
 
 object embalajeDeSeguridad {
@@ -120,6 +161,9 @@ object embalajeDeSeguridad {
 	method peso() { return cosaEnvuelta.peso() }
 	method nivelPeligrosidad() { return cosaEnvuelta.nivelPeligrosidad()/2 }
 	method bultos() { return 2 }
+
+	method sufrirCambiosPostCarga() {}
+	
 }
 
 //dividir al objeto bumblebee en coche y robot (ya que, dependiendo de su estado, bumblebee puede ser robot o auto)

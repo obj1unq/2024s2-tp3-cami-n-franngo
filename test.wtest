@@ -110,3 +110,16 @@ describe "segunda serie de mensajes del camión" {
     }
 
 }
+
+describe "consecuencias de la carga" {
+
+    test "cambios post carga en residuosRadioactivos y bateriaAntiaerea" {
+        residuosRadioactivos.peso(40)
+        bateriaAntiaerea.estado(sinMisiles)
+        camion.cargar(residuosRadioactivos)
+        camion.cargar(bateriaAntiaerea)
+        assert.equals(55, residuosRadioactivos.peso())
+        assert.equals(conMisiles, bateriaAntiaerea.estado())
+    }
+
+}
