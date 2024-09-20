@@ -1,0 +1,299 @@
+import camion.*
+import cosas.*
+
+/*
+describe "primera serie de mensajes del camión" {
+
+    test "cargar al camión" {
+        camion.cargar(knightRider)
+        camion.cargar(paraTest1)
+        camion.cargar(paraTest2)
+        assert.equals(#{knightRider, paraTest1, paraTest2}, camion.cosas())
+        assert.equals(3, camion.cosas().size())
+    }
+
+    test "excepción si descargo algo que no fue cargado" {
+        camion.cargar(paraTest1)
+        camion.cargar(paraTest2)
+        assert.throwsExceptionWithMessage("No se puede descargar del camión una cosa que no se tiene", {camion.descargar(knightRider)})
+    }
+
+    test "tiene peso par" {
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.that(camion.todoPesoPar())
+        camion.cargar(paraTest1)
+        assert.notThat(camion.todoPesoPar())
+    }
+
+    test "hay alguno que pesa 1200" {
+        camion.cargar(paraTest2) 
+        assert.that(camion.hayAlgunoQuePesa(1200))
+    }
+
+    test "el de nivel 10 es knigthRider" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(knightRider, camion.elDeNivel(10))
+    }
+
+    test "el peso del camión con las 3 cosas es 2901" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(2901, camion.pesoTotal())
+    }
+
+    test "el camión con las 3 cosas cargadas está excedido de peso" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.that(camion.excedidoDePeso())
+    }
+
+    test "paraTest2 y knigthRider superan peligrosidad de 8" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(#{paraTest2, knightRider}, camion.objetosQueSuperanPeligrosidad(8))
+    }
+
+    test "paraTest2 y knightRider son más peligrosos que paraTest1" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        camion.cargar(paraTest2)
+        assert.equals(#{knightRider, paraTest2}, camion.objetosMasPeligrososQueCosa(paraTest1))
+    }
+
+    test "camión con paraTest1 y knigthRider puede circular en ruta con nivel de peligrosidad 11" {
+        camion.cargar(paraTest1)
+        camion.cargar(knightRider)
+        assert.that(camion.puedeCircularEnRuta(11))
+    }
+
+}
+*/
+
+/* //con las consecuencias de la carga agregadas, este describe que no las tenía en cuenta ya no sirve
+describe "segunda serie de mensajes del camión" {
+
+    method initialize() {
+        bumblebee.estado(auto)
+        camion.cargar(bumblebee)
+        paqueteDeLadrillos.cantidadDeLadrillos(150)
+        camion.cargar(paqueteDeLadrillos)
+        bateriaAntiaerea.estado(conMisiles)
+        camion.cargar(bateriaAntiaerea)
+        arenaAGranel.peso(10)
+        contenedorPortuario.cosas(#{arenaAGranel, knightRider})
+        camion.cargar(contenedorPortuario)
+    }
+    //#{bumblebee, paqueteDeLadrillos, bateriaAntiaerea, contenedorPortuario}
+    //pesos de la carga del camión: 800, 300, 300, 610
+    //bultos de la carga del camión: 2+2+2+3=9
+
+    test "tiene algo que pesa entre a y b" {
+        assert.that(camion.tieneAlgoQuePesaEntre(500,650))
+        assert.notThat(camion.tieneAlgoQuePesaEntre(310,600))
+    }
+
+    test "la cosa más pesada es bumblebee" {
+        assert.equals(bumblebee, camion.cosaMasPesada())
+    }
+
+    test "los pesos de la carga del camión" {
+        assert.equals([800, 300, 300, 610], camion.pesos())
+    }
+
+    test "los bultos del camión" {
+        assert.equals(9, camion.totalBultos())
+    }
+
+}
+*/
+
+describe "consecuencias de la carga" {
+
+    test "cambios post carga en residuosRadioactivos y bateriaAntiaerea" {
+        residuosRadioactivos.peso(40)
+        bateriaAntiaerea.estado(sinMisiles)
+        camion.cargar(residuosRadioactivos)
+        camion.cargar(bateriaAntiaerea)
+        assert.equals(55, residuosRadioactivos.peso())
+        assert.equals(conMisiles, bateriaAntiaerea.estado())
+    }
+
+}
+
+describe "segunda serie de mensajes del camión (teniendo en cuenta consecuencias de la carga)" {
+
+    method initialize() {
+        bumblebee.estado(auto)
+        camion.cargar(bumblebee) //su estado pasa a robot
+        paqueteDeLadrillos.cantidadDeLadrillos(150)
+        camion.cargar(paqueteDeLadrillos) //se le agregan 12 ladrillos
+        bateriaAntiaerea.estado(conMisiles)
+        camion.cargar(bateriaAntiaerea) //se cargan misiles (o sea, queda igual)
+        arenaAGranel.peso(10)
+        contenedorPortuario.cosas(#{arenaAGranel, knightRider}) 
+        camion.cargar(contenedorPortuario) //se agregan 20 kilos a arenaAGranel y knightRider queda igual
+    }
+    //#{bumblebee, paqueteDeLadrillos, bateriaAntiaerea, contenedorPortuario}
+    //pesos de la carga del camión: 800, 324, 300, 630
+    //bultos de la carga del camión: 2+2+2+3=9
+
+    test "tiene algo que pesa entre a y b" {
+        assert.that(camion.tieneAlgoQuePesaEntre(500,650))
+        assert.notThat(camion.tieneAlgoQuePesaEntre(325,600))
+    }
+
+    test "la cosa más pesada es bumblebee" {
+        assert.equals(bumblebee, camion.cosaMasPesada())
+    }
+
+    test "los pesos de la carga del camión" {
+        assert.equals([800, 324, 300, 630], camion.pesos())
+    }
+
+    test "los bultos del camión" {
+        assert.equals(9, camion.totalBultos())
+    }
+
+}
+
+describe "transporte" {
+
+    /*
+    test "transportar(almacen) aún sin las validaciones" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        camion.transportar(almacen)
+        assert.equals(#{}, camion.cosas())
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos, arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+    }
+    */
+
+    test "transportar con validaciones 1" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        residuosRadioactivos.peso(100)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        //la carga del camión es #{bumblebee, knightRider, residuosRadioactivos}
+        //el peso es 1000 + 800 + 500 + 115 = 2415
+        //los bultos son 2 + 1 + 1 = 4
+        //el elemento de mayor peligrosidad tiene nivel 200
+        almacen.bultosMaximos(4)
+        caminosVecinales.pesoMaximo(2450)
+        assert.doesNotThrowException({camion.transportar(almacen, caminosVecinales)})
+        assert.equals(#{}, camion.cosas())
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos, arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+    }
+
+    test "transportar con validaciones 2" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        residuosRadioactivos.peso(200)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        //la carga del camión es #{bumblebee, knightRider, residuosRadioactivos}
+        //el peso es 1000 + 800 + 500 + 215 = 2515
+        //los bultos son 2 + 1 + 1 = 4
+        //el elemento de mayor peligrosidad tiene nivel 200
+        almacen.bultosMaximos(4)
+        caminosVecinales.pesoMaximo(2450)
+        assert.throwsException({camion.transportar(almacen, caminosVecinales)}) //falla en validarTransportePeso por 15kg
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas()) //el estado del camión y del almacen siguen iguales que antes
+    }
+
+    test "transportar con validaciones 3" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        residuosRadioactivos.peso(100)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        //la carga del camión es #{bumblebee, knightRider, residuosRadioactivos}
+        //el peso es 1000 + 800 + 500 + 115 = 2415
+        //los bultos son 2 + 1 + 1 = 4
+        //el elemento de mayor peligrosidad tiene nivel 200
+        almacen.bultosMaximos(3)
+        caminosVecinales.pesoMaximo(2450)
+        assert.throwsException({camion.transportar(almacen, caminosVecinales)}) //falla en validarTransporteAlmacen por un bulto
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas()) //el estado del camión y del almacen siguen iguales que antes
+    }
+
+    test "transportar con validaciones 4" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        residuosRadioactivos.peso(100)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        //la carga del camión es #{bumblebee, knightRider, residuosRadioactivos}
+        //el peso es 1000 + 800 + 500 + 115 = 2415
+        //los bultos son 2 + 1 + 1 = 4
+        //el elemento de mayor peligrosidad tiene nivel 200
+        almacen.bultosMaximos(4)
+        caminosVecinales.pesoMaximo(2410)
+        assert.throwsException({camion.transportar(almacen, caminosVecinales)}) //falla en validarTransporteCamino por 5 kg
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas()) //el estado del camión y del almacen siguen iguales que antes
+    }
+
+    test "transportar con validaciones 5" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        residuosRadioactivos.peso(100)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        //la carga del camión es #{bumblebee, knightRider, residuosRadioactivos}
+        //el peso es 1000 + 800 + 500 + 115 = 2415
+        //los bultos son 2 + 1 + 1 = 4
+        //el elemento de mayor peligrosidad tiene nivel 200
+        almacen.bultosMaximos(4)
+        assert.throwsException({camion.transportar(almacen, ruta9)}) //falla en validarTransporteCamino por superar el límite de peligrosidad que era de 11
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas()) //el estado del camión y del almacen siguen iguales que antes
+    }
+
+}
