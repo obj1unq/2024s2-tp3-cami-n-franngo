@@ -75,6 +75,7 @@ describe "primera serie de mensajes del camión" {
 }
 */
 
+/* //con las consecuencias de la carga agregadas, este describe debe tener en cuenta las mismas
 describe "segunda serie de mensajes del camión" {
 
     method initialize() {
@@ -110,6 +111,7 @@ describe "segunda serie de mensajes del camión" {
     }
 
 }
+*/
 
 describe "consecuencias de la carga" {
 
@@ -120,6 +122,42 @@ describe "consecuencias de la carga" {
         camion.cargar(bateriaAntiaerea)
         assert.equals(55, residuosRadioactivos.peso())
         assert.equals(conMisiles, bateriaAntiaerea.estado())
+    }
+
+}
+
+describe "segunda serie de mensajes del camión (teniendo en cuenta consecuencias de la carga)" {
+
+    method initialize() {
+        bumblebee.estado(auto)
+        camion.cargar(bumblebee) //su estado pasa a robot
+        paqueteDeLadrillos.cantidadDeLadrillos(150)
+        camion.cargar(paqueteDeLadrillos) //se le agregan 12 ladrillos
+        bateriaAntiaerea.estado(conMisiles)
+        camion.cargar(bateriaAntiaerea) //se cargan misiles (o sea, queda igual)
+        arenaAGranel.peso(10)
+        contenedorPortuario.cosas(#{arenaAGranel, knightRider}) 
+        camion.cargar(contenedorPortuario) //se agregan 20 kilos a arenaAGranel y knightRider queda igual
+    }
+    //#{bumblebee, paqueteDeLadrillos, bateriaAntiaerea, contenedorPortuario}
+    //pesos de la carga del camión: 800, 324, 300, 630
+    //bultos de la carga del camión: 2+2+2+3=9
+
+    test "tiene algo que pesa entre a y b" {
+        assert.that(camion.tieneAlgoQuePesaEntre(500,650))
+        assert.notThat(camion.tieneAlgoQuePesaEntre(325,600))
+    }
+
+    test "la cosa más pesada es bumblebee" {
+        assert.equals(bumblebee, camion.cosaMasPesada())
+    }
+
+    test "los pesos de la carga del camión" {
+        assert.equals([800, 324, 300, 630], camion.pesos())
+    }
+
+    test "los bultos del camión" {
+        assert.equals(9, camion.totalBultos())
     }
 
 }
