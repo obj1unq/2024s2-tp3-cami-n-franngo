@@ -96,7 +96,8 @@ object camion {
 		return cosas.sum({cosa => cosa.bultos()})
 	}
 
-	method transportar(destino) {
+	method transportar(destino, camino) {
+		self.validarTransporte(destino, camino)
 		cosas.forEach({cosa => self.descargar(cosa,destino)})
 	}
 
@@ -112,10 +113,25 @@ object camion {
 		}
 	}
 
+	method validarTransporte(destino, camino) {
+		self.validarTransportePeso()
+		destino.validarTransporteDestino(self)
+		camino.validarTransporteCamino(self)
+	}
+
+	method validarTransportePeso() {
+		if(self.excedidoDePeso()) {
+			self.error("No es posible realizar el transporte deseado por un exceso del peso permitido para el camión de " + (self.pesoTotal()-pesoMaximo) + "kg")
+		}
+	}
+
 }
+
+//destinos
 
 object almacen {
 	const property cosas = #{}
+	var property bultosMaximos = 0
 
 	method sacarSiEsta(cosa) {
 		if(cosas.contains(cosa)) {
@@ -126,6 +142,36 @@ object almacen {
 	method colocar(cosa) {
 		camion.descargarSiEsta(cosa) //SE SACA SI ESTÁ AHÍ, esto debido a que no tendría sentido que una cosa estuviese en 2 lugares distintos
 		cosas.add(cosa)
+	}
+
+	method validarTransporteDestino(camion) {
+		if(camion.totalBultos()>bultosMaximos) {
+			self.error("No es posible realizar el transporte deseado por un exceso de bultos de " + (camion.totalBultos()-bultosMaximos) )
+		}
+	}
+
+}
+
+//rutas
+
+object ruta9 {
+	const nivelPeligrosidad = 11
+
+	method validarTransporteCamino(camion) {
+		if(camion.hayMasPeligrosoQue(nivelPeligrosidad)) { //puedeCircularEnRuta chequea el peso que ya se revisa en validarTransportePeso(), por lo que con este método alcanza
+			self.error("No es posible realizar el transporte deseado por la presencia de elementos que superan el límite de peligrosidad")
+		}
+	}
+
+}
+
+object caminosVecinales {
+	var property pesoMaximo = 0
+
+	method validarTransporteCamino(camion) {
+		if(camion.pesoTotal()>pesoMaximo) {
+			self.error("No es posible realizar el transporte deseado por un exceso del peso permitido en estos caminos de " + (camion.pesoTotal()-pesoMaximo) + "kg")
+		}
 	}
 
 }

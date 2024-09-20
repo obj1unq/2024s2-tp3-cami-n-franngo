@@ -163,11 +163,5 @@ object embalajeDeSeguridad {
 	method bultos() { return 2 }
 
 	method sufrirCambiosPostCarga() {}
-	
+
 }
-
-//dividir al objeto bumblebee en coche y robot (ya que, dependiendo de su estado, bumblebee puede ser robot o auto)
-//le mando el mensaje a bumblebee y el se encarga de delegar al objeto correspondiente con polimorfismo (SIN IFS)
-//nunca preguntarle el estado al objeto. solo delegar (será responsabilidad de ese objeto resolver)
-
-
