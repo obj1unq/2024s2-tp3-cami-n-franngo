@@ -6,12 +6,13 @@ object camion {
 	const pesoMaximo = 2500
 		
 	method cargar(cosa) {
+		almacen.sacarSiEsta(cosa) //SE SACA SI ESTÁ AHÍ, esto debido a que no tendría sentido que una cosa estuviese en 2 lugares distintos
 		cosas.add(cosa)
 		cosa.sufrirCambiosPostCarga()
 	}
 
-	method descargar(cosa) {
-		self.validarQueSeTiene(cosa)
+	method descargar(cosa) { 
+		self.validarQueSeTiene(cosa) //esto primero porque es lo que puede tirar excepción
 		cosas.remove(cosa)
 	}
 
@@ -93,6 +94,38 @@ object camion {
 
 	method totalBultos() {
 		return cosas.sum({cosa => cosa.bultos()})
+	}
+
+	method transportar(destino) {
+		cosas.forEach({cosa => self.descargar(cosa,destino)})
+	}
+
+	method descargar(cosa, destino) {
+		self.validarQueSeTiene(cosa) //esto primero porque es lo que puede tirar excepción
+		cosas.remove(cosa)
+		destino.colocar(cosa)
+	}
+
+	method descargarSiEsta(cosa) {
+		if(cosas.contains(cosa)) {
+			cosas.remove(cosa)
+		}
+	}
+
+}
+
+object almacen {
+	const property cosas = #{}
+
+	method sacarSiEsta(cosa) {
+		if(cosas.contains(cosa)) {
+			cosas.remove(cosa)
+		}
+	}
+
+	method colocar(cosa) {
+		camion.descargarSiEsta(cosa) //SE SACA SI ESTÁ AHÍ, esto debido a que no tendría sentido que una cosa estuviese en 2 lugares distintos
+		cosas.add(cosa)
 	}
 
 }

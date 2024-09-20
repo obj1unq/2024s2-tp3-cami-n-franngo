@@ -161,3 +161,23 @@ describe "segunda serie de mensajes del camión (teniendo en cuenta consecuencia
     }
 
 }
+
+describe "transporte" {
+
+    test "transportar(almacen) aún sin las validaciones" {
+        almacen.colocar(arenaAGranel)
+        almacen.colocar(bateriaAntiaerea)
+        almacen.colocar(bumblebee)
+        camion.cargar(paqueteDeLadrillos)
+        camion.cargar(bumblebee) //por la forma en que se implementó, se saca del almacen y luego se carga en el camión
+        camion.cargar(knightRider)
+        camion.descargar(paqueteDeLadrillos)
+        camion.cargar(residuosRadioactivos)
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos}, camion.cosas())
+        assert.equals(#{arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+        camion.transportar(almacen)
+        assert.equals(#{}, camion.cosas())
+        assert.equals(#{bumblebee, knightRider, residuosRadioactivos, arenaAGranel, bateriaAntiaerea}, almacen.cosas())
+    }
+
+}
