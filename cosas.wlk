@@ -126,7 +126,7 @@ object contenedorPortuario {
 	method pesoDeCosas() { return cosas.sum({cosa => cosa.peso()}) }
 
 	method elMasPeligroso() {
-		return cosas.max({cosa => cosa.nivelPeligrosidad()})
+		return cosas.maxIfEmtpy({cosa => cosa.nivelPeligrosidad()}, {null})
 	}
 
 	method bultosDeCosasEnContenedor() {
