@@ -1,5 +1,6 @@
 import cosas.*
 
+//prueba
 object camion {
 	const property cosas = #{}
 	const pesoTara = 1000
