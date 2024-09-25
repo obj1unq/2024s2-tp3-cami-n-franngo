@@ -115,6 +115,8 @@ describe "segunda serie de mensajes del camión" {
 
 describe "consecuencias de la carga" {
 
+    const camion = new Camion()
+
     test "cambios post carga en residuosRadioactivos y bateriaAntiaerea" {
         residuosRadioactivos.peso(40)
         bateriaAntiaerea.estado(sinMisiles)
@@ -127,6 +129,8 @@ describe "consecuencias de la carga" {
 }
 
 describe "segunda serie de mensajes del camión (teniendo en cuenta consecuencias de la carga)" {
+
+    const camion = new Camion()
 
     method initialize() {
         bumblebee.estado(auto)
@@ -163,6 +167,12 @@ describe "segunda serie de mensajes del camión (teniendo en cuenta consecuencia
 }
 
 describe "transporte" {
+
+    const camion = new Camion()
+
+    method initialize() {
+        almacen.camion(camion)
+    }
 
     /*
     test "transportar(almacen) aún sin las validaciones" {

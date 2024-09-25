@@ -1,7 +1,8 @@
 import cosas.*
 
 //prueba
-object camion {
+
+class Camion {
 	const property cosas = #{}
 	const pesoTara = 1000
 	const pesoMaximo = 2500
@@ -125,7 +126,6 @@ object camion {
 			self.error("No es posible realizar el transporte deseado por un exceso del peso permitido para el camión de " + (self.pesoTotal()-pesoMaximo) + "kg")
 		}
 	}
-
 }
 
 //destinos
@@ -133,6 +133,7 @@ object camion {
 object almacen {
 	const property cosas = #{}
 	var property bultosMaximos = 0
+	var property camion = null
 
 	method sacarSiEsta(cosa) {
 		if(cosas.contains(cosa)) {
@@ -145,8 +146,8 @@ object almacen {
 		cosas.add(cosa)
 	}
 
-	method validarTransporteDestino(camion) {
-		if(camion.totalBultos()>bultosMaximos) {
+	method validarTransporteDestino(camionDado) {
+		if(camionDado.totalBultos()>bultosMaximos) {
 			self.error("No es posible realizar el transporte deseado por un exceso de bultos de " + (camion.totalBultos()-bultosMaximos) )
 		}
 	}
