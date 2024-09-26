@@ -171,7 +171,8 @@ describe "transporte" {
     const camion = new Camion()
 
     method initialize() {
-        almacen.camion(camion)
+        almacen.camion(camion) //es como que quedan 2 referencias PERO AL MISMO OBJETO (la constante global camión y el atributo variable
+                               //del objeto almacen. Sea cual sea que use almacen, apuntan al MISMO OBJETO)
     }
 
     /*
